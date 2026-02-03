@@ -4,10 +4,6 @@ Added some more functionality to the original Audile app such as adding timestam
 
 **Download APK here:** [audilemodded.apk](releases/audilemodded.apk)
 
-## Screenshots
-
-<!-- Add screenshots here -->
-
 ## Get from source
 
 ```bash
@@ -18,12 +14,12 @@ git clone https://gitlab.com/bearincrypto1/audilemodded.git
 
 ```
 com.mrsep.musicrecognizer/
-├── FORKEDITS/             # All fork-specific code
-│   ├── AutoRecognitionService.kt      # Background recognition service
-│   ├── AutoRecognitionTileService.kt  # Quick Settings tile
+├── FORKEDITS/                         # All mod-specific code
+│   ├── AutoRecognitionService.kt      # Background recognition service for auto-recognize function
+│   ├── AutoRecognitionTileService.kt  # Quick settings auto-recognize tile
 │   ├── ForkEditsScreen.kt             # Fork settings UI
 │   ├── ForkEditsViewModel.kt          # Fork settings logic
-│   └── forkchanges.md                 # Complete changelog
+│   └── forkchanges.md                 # Complete log of changes to the original audile codebase
 ```
 
 ## License

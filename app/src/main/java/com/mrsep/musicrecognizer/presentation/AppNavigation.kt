@@ -68,6 +68,8 @@ import com.mrsep.musicrecognizer.feature.track.presentation.lyrics.LyricsScreen.
 import com.mrsep.musicrecognizer.feature.track.presentation.track.TrackScreen
 import com.mrsep.musicrecognizer.feature.track.presentation.track.TrackScreen.navigateToTrackScreen
 import com.mrsep.musicrecognizer.feature.track.presentation.track.TrackScreen.trackScreen
+import com.mrsep.musicrecognizer.forkedits.ForkEditsScreen
+import com.mrsep.musicrecognizer.forkedits.forkEditsScreen
 
 private const val SCREEN_TRANSITION_DURATION = 250
 
@@ -335,6 +337,12 @@ private fun BarNavHost(
                     outerNavController.navigateToDeveloperScreen(from)
                 }
             )
+        }
+        navigation(
+            startDestination = ForkEditsScreen.ROUTE,
+            route = TopLevelDestination.ForkEdits.route
+        ) {
+            forkEditsScreen()
         }
     }
 }

@@ -7,4 +7,6 @@ sealed class AudioCaptureConfig {
     data object Microphone : AudioCaptureConfig()
     data class Device(val mediaProjection: MediaProjection?) : AudioCaptureConfig()
     data class Auto(val mediaProjection: MediaProjection?) : AudioCaptureConfig()
+    data object Visualizer : AudioCaptureConfig()
+    data object AutoVisualizerMic : AudioCaptureConfig()
 }

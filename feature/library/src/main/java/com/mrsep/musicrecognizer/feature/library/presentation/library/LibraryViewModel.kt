@@ -38,7 +38,8 @@ internal class LibraryViewModel @Inject constructor(
                     trackFilter = preferences.trackFilter,
                     isEmptyLibrary = true,
                     useGridLayout = preferences.useGridForLibrary,
-                    showRecognitionDate = preferences.showRecognitionDateInLibrary
+                    showRecognitionDate = preferences.showRecognitionDateInLibrary,
+                    showTimestampFormat = preferences.showTimestampFormatInLibrary
                 )
             )
         } else {
@@ -51,7 +52,8 @@ internal class LibraryViewModel @Inject constructor(
                         trackFilter = preferences.trackFilter,
                         isEmptyLibrary = false,
                         useGridLayout = preferences.useGridForLibrary,
-                        showRecognitionDate = preferences.showRecognitionDateInLibrary
+                        showRecognitionDate = preferences.showRecognitionDateInLibrary,
+                        showTimestampFormat = preferences.showTimestampFormatInLibrary
                     )
                 }
         }
@@ -98,6 +100,7 @@ internal sealed class LibraryUiState {
         val trackFilter: TrackFilter,
         val isEmptyLibrary: Boolean,
         val useGridLayout: Boolean,
-        val showRecognitionDate: Boolean
+        val showRecognitionDate: Boolean,
+        val showTimestampFormat: Boolean
     ) : LibraryUiState()
 }

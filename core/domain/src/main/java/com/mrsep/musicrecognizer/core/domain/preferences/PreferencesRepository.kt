@@ -28,6 +28,9 @@ interface PreferencesRepository {
     suspend fun setUseGridForRecognitionQueue(value: Boolean)
     suspend fun setShowRecognitionDateInLibrary(value: Boolean)
     suspend fun setShowCreationDateInQueue(value: Boolean)
+    suspend fun setShowTimestampFormatInLibrary(value: Boolean)
+    suspend fun setShowRecognitionPopup(value: Boolean)
+    suspend fun setAutoRecognizeEnabled(value: Boolean)
     suspend fun setThemeMode(value: ThemeMode)
     suspend fun setUsePureBlackForDarkTheme(value: Boolean)
 }

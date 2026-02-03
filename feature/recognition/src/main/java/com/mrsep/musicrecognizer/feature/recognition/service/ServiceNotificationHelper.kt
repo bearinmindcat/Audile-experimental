@@ -24,7 +24,9 @@ class ServiceNotificationHelper @Inject constructor(
             .setSmallIcon(UiR.drawable.ic_notification_ready)
             .setOnlyAlertOnce(true)
             .setShowWhen(false)
-            .setGroup(NOTIFICATION_CHANNEL_ID_STATUS)
+            // Use own group and mark as group summary to prevent auto-bundling with song results
+            .setGroup(NOTIFICATION_GROUP_KEY_STATUS)
+            .setGroupSummary(true)
             .setOngoing(true) // Can be dismissed by user since API 34
             .setCategory(Notification.CATEGORY_SERVICE)
             .setSilent(true) // Avoids alert sound during recording
@@ -101,6 +103,7 @@ class ServiceNotificationHelper @Inject constructor(
     companion object {
         const val NOTIFICATION_ID_STATUS = 1
         private const val NOTIFICATION_CHANNEL_ID_STATUS = "com.mrsep.musicrecognizer.status"
+        private const val NOTIFICATION_GROUP_KEY_STATUS = "com.mrsep.musicrecognizer.STATUS_GROUP"
 
         fun getChannelForRecognitionStatuses(context: Context): NotificationChannel {
             val name = context.getString(StringsR.string.notification_channel_name_control)

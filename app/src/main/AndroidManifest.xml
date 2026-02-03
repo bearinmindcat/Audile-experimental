@@ -80,6 +80,31 @@
             </intent-filter>
         </service>
 
+        <!-- Auto-recognition service (FORKEDITS) -->
+        <service
+            android:name=".forkedits.AutoRecognitionService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+
+        <!-- Auto-recognition quick settings tile (FORKEDITS) -->
+        <service
+            android:name=".forkedits.AutoRecognitionTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_auto_recognize"
+            android:label="@string/auto_recognize_tile_inactive"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="false" />
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".feature.recognition.service.DisableRecognitionControlServiceReceiver"
             android:exported="false" />

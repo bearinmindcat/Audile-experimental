@@ -126,6 +126,18 @@ internal class PreferencesRepositoryImpl @Inject constructor(
         safeWriter { showCreationDateInQueue = value }
     }
 
+    override suspend fun setShowTimestampFormatInLibrary(value: Boolean) {
+        safeWriter { showTimestampFormatInLibrary = value }
+    }
+
+    override suspend fun setShowRecognitionPopup(value: Boolean) {
+        safeWriter { showRecognitionPopup = value }
+    }
+
+    override suspend fun setAutoRecognizeEnabled(value: Boolean) {
+        safeWriter { autoRecognizeEnabled = value }
+    }
+
     override suspend fun setThemeMode(value: ThemeMode) {
         safeWriter { themeMode = value.toProto() }
     }

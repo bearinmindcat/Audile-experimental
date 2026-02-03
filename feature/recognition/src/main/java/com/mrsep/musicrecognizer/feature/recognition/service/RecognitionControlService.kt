@@ -159,6 +159,12 @@ class RecognitionControlService : Service() {
                         }
                         startForegroundWithType(mediaProjection)
                     }
+                    AudioCaptureServiceMode.Visualizer -> {
+                        startForegroundWithType(false)
+                    }
+                    AudioCaptureServiceMode.AutoVisualizerMic -> {
+                        startForegroundWithType(false)
+                    }
                 }
                 if (!isStartedForeground) return@run
                 onLaunchRecognition(audioCaptureServiceMode)
@@ -293,6 +299,10 @@ class RecognitionControlService : Service() {
                 } else {
                     AudioCaptureConfig.Auto(null)
                 }
+
+                AudioCaptureServiceMode.Visualizer -> AudioCaptureConfig.Visualizer
+
+                AudioCaptureServiceMode.AutoVisualizerMic -> AudioCaptureConfig.AutoVisualizerMic
             }
             if (captureConfig == null) return@launch
             val recorderController = audioRecordingControllerFactory.getAudioController(captureConfig)
@@ -308,8 +318,7 @@ class RecognitionControlService : Service() {
                     RecognitionStatus.Ready -> {} // NO-OP
 
                     is RecognitionStatus.Recognizing -> {
-                        // Cancel last result notification if it exists
-                        resultNotificationHelper.cancelResultNotification()
+                        // Don't cancel result notifications - let them stack like Shazam
                         screenStatusHolder.updateStatus(status)
                         widgetStatusHolder.updateStatus(status)
                         requestWidgetsUpdate()
@@ -323,9 +332,13 @@ class RecognitionControlService : Service() {
                             prepareTrackImages(recognitionResult.track)
                         }
                         val isScreenUpdated = screenStatusHolder.updateStatusIfObserving(status)
+                        val showRecognitionPopup = preferencesRepository.userPreferencesFlow.first().showRecognitionPopup
                         if (isScreenUpdated) {
                             widgetStatusHolder.updateStatus(RecognitionStatus.Ready)
-                            resultNotificationHelper.notifyForegroundResult(status.result)
+                            // Show popup notification if preference is enabled
+                            if (showRecognitionPopup && recognitionResult is RecognitionResult.Success) {
+                                resultNotificationHelper.notifyBackgroundResult(status.result)
+                            }
                         } else {
                             screenStatusHolder.updateStatus(RecognitionStatus.Ready)
                             if (hasActiveWidgets()) {
@@ -333,6 +346,7 @@ class RecognitionControlService : Service() {
                             } else {
                                 widgetStatusHolder.updateStatus(RecognitionStatus.Ready)
                             }
+                            // Always show background notification (widget/notification usage)
                             resultNotificationHelper.notifyBackgroundResult(status.result)
                         }
                         requestWidgetsUpdate()
@@ -515,4 +529,6 @@ sealed class AudioCaptureServiceMode : Parcelable {
     data object Microphone : AudioCaptureServiceMode()
     data class Device(val mediaProjectionData: Intent?) : AudioCaptureServiceMode()
     data class Auto(val mediaProjectionData: Intent?) : AudioCaptureServiceMode()
+    data object Visualizer : AudioCaptureServiceMode()
+    data object AutoVisualizerMic : AudioCaptureServiceMode()
 }

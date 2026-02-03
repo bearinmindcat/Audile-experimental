@@ -186,6 +186,8 @@
     <string name="align_to_start">Align to start</string>
     <string name="bold_text">Bold text</string>
     <string name="high_contrast_text">High-contrast text</string>
+    <!-- Fork Edits screen (custom modifications) -->
+    <string name="fork_edits">FORK EDITS</string>
     <!-- Preferences screen -->
     <string name="preferences">Preferences</string>
     <string name="pref_group_recognition">Recognition</string>
@@ -200,6 +202,9 @@
     <string name="audio_capture_mode_microphone">Microphone</string>
     <string name="audio_capture_mode_device">Device audio</string>
     <string name="audio_capture_mode_auto">Automatic</string>
+    <string name="audio_capture_mode_auto_device_mic">Automatic (Device -> Mic)</string>
+    <string name="audio_capture_mode_visualizer">Visualizer API</string>
+    <string name="audio_capture_mode_auto_visualizer_mic">Automatic (Visualizer -> Mic)</string>
     <string name="audio_source_dialog_use_alt_device_source">Use alternative device audio source</string>
     <string name="pref_title_fallback_policy">Recognition fallback policy</string>
     <string name="pref_subtitle_fallback_policy">Set fallback actions after unsuccessful recognitions</string>
@@ -285,6 +290,15 @@
     <string name="notification_channel_desc_background_result">Shows song results when the app is minimized or you’re not on the recognition screen</string>
     <string name="notification_channel_name_scheduled_result">Song results of scheduled recognitions</string>
     <string name="notification_channel_desc_scheduled_result">Shows song results of recognitions that were scheduled offline or in other cases</string>
+
+    <!-- Auto-recognize feature -->
+    <string name="auto_recognize_notification_channel_name">Auto-recognition service</string>
+    <string name="auto_recognize_notification_channel_desc">Continuous background music recognition</string>
+    <string name="auto_recognize_notification_title">Auto-recognition active</string>
+    <string name="auto_recognize_notification_text">Listening for songs in the background</string>
+    <string name="auto_recognize_tile_active">Auto recognize ON</string>
+    <string name="auto_recognize_tile_inactive">Auto recognize</string>
+    <string name="stop">Stop</string>
 
     <string name="crash_dialog_title">Audile has crashed</string>
     <string name="crash_dialog_message">An unexpected error has occurred, causing the app to stop. Would you like to email the bug report to help fix the issue\?</string>

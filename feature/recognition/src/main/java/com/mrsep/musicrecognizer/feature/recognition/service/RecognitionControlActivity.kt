@@ -153,6 +153,12 @@ class RecognitionControlActivity : ComponentActivity() {
                 Log.w(this::class.java.simpleName, "AudioPlaybackCapture API is available on Android 10+")
                 finish()
             }
+            AudioCaptureMode.Visualizer -> {
+                onLaunchRecognition(AudioCaptureServiceMode.Visualizer)
+            }
+            AudioCaptureMode.AutoVisualizerMic -> {
+                onLaunchRecognition(AudioCaptureServiceMode.AutoVisualizerMic)
+            }
         }
     }
 
@@ -296,4 +302,6 @@ internal fun AudioCaptureMode.toServiceMode(mediaProjectionData: Intent?) = when
     AudioCaptureMode.Microphone -> AudioCaptureServiceMode.Microphone
     AudioCaptureMode.Device -> AudioCaptureServiceMode.Device(mediaProjectionData)
     AudioCaptureMode.Auto -> AudioCaptureServiceMode.Auto(mediaProjectionData)
+    AudioCaptureMode.Visualizer -> AudioCaptureServiceMode.Visualizer
+    AudioCaptureMode.AutoVisualizerMic -> AudioCaptureServiceMode.AutoVisualizerMic
 }

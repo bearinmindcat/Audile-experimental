@@ -88,6 +88,7 @@ internal fun LibraryScreen(
                             lazyGridState = lazyGridState,
                             multiSelectionState = multiSelectionState,
                             showRecognitionDate = uiState.showRecognitionDate,
+                            showTimestampFormat = uiState.showTimestampFormat,
                             modifier = Modifier
                                 .nestedScroll(topBarBehaviour.nestedScrollConnection)
                                 .fillMaxSize()
@@ -107,6 +108,7 @@ internal fun LibraryScreen(
                             lazyListState = lazyListState,
                             multiSelectionState = multiSelectionState,
                             showRecognitionDate = uiState.showRecognitionDate,
+                            showTimestampFormat = uiState.showTimestampFormat,
                             modifier = Modifier
                                 .nestedScroll(topBarBehaviour.nestedScrollConnection)
                                 .fillMaxSize()

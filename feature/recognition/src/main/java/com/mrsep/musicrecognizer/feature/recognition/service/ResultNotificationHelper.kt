@@ -43,7 +43,7 @@ class ResultNotificationHelper @Inject constructor(
         .getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
 
     fun cancelResultNotification() {
-        notificationManager.cancel(NOTIFICATION_ID_RESULT)
+        notificationManager.cancel(NOTIFICATION_ID_SUMMARY)
     }
 
     suspend fun notifyForegroundResult(result: RecognitionResult) {
@@ -156,18 +156,36 @@ class ResultNotificationHelper @Inject constructor(
                 resultNotificationBuilder(channelId)
                     .setContentTitle(result.track.title)
                     .setContentText(result.track.artist)
-                    .setExpandedStyleWithTrack(
-                        artworkUrl = result.track.artworkUrl,
-                        contentTitle = result.track.title,
-                        contentText = result.track.artistWithAlbumFormatted()
-                    )
+                    .setLargeIconWithTrack(result.track.artworkUrl)
                     .addTrackDeepLinkIntent(result.track.id)
                     .addOptionalShowLyricsButton(result.track, isLyricsFetcherRunning)
                     .addShareButton(result.track.getSharedBody())
                     .addTrackInfoToExtras(result.track)
             }
         }
-        notificationManager.notify(NOTIFICATION_ID_RESULT, notificationBuilder.build())
+        // Use unique ID for success notifications so they stack separately
+        val notificationId = if (result is RecognitionResult.Success) {
+            notificationIdCounter++
+        } else {
+            NOTIFICATION_ID_ERROR
+        }
+
+        // For success results, post summary notification first so song immediately joins the stack
+        if (result is RecognitionResult.Success) {
+            recognizedSongsCount++
+            val summaryNotification = NotificationCompat.Builder(appContext, channelId)
+                .setSmallIcon(UiR.drawable.ic_notification_ready)
+                .setContentTitle(result.track.title)
+                .setContentText(result.track.artist)
+                .setGroup(NOTIFICATION_GROUP_KEY)
+                .setGroupSummary(true)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setAutoCancel(true)
+                .build()
+            notificationManager.notify(NOTIFICATION_ID_SUMMARY, summaryNotification)
+        }
+
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
     suspend fun notifyResult(enqueuedRecognition: EnqueuedRecognition) {
@@ -196,12 +214,13 @@ class ResultNotificationHelper @Inject constructor(
             .setAutoCancel(true)
             .setOngoing(false)
             .setCategory(Notification.CATEGORY_MESSAGE)
-            .setContentTitle(contentTitle)
-            .setContentText(contentText)
-            .setExpandedStyleWithTrack(
-                artworkUrl = track.artworkUrl,
-                contentTitle = contentTitle,
-                contentText = track.title + "\n" + track.artistWithAlbumFormatted()
+            .setContentTitle(track.title)
+            .setContentText(track.artist)
+            .setLargeIconWithTrack(track.artworkUrl)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .setBigContentTitle(track.title)
+                    .bigText(track.artistWithAlbumFormatted())
             )
             .addTrackDeepLinkIntent(track.id)
             .addOptionalShowLyricsButton(track, isLyricsFetcherRunning)
@@ -356,8 +375,8 @@ class ResultNotificationHelper @Inject constructor(
             .setShowWhen(true)
             .setOngoing(false)
             .setAutoCancel(true)
-            .setGroup(channelId)
-            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
+            .setGroup(NOTIFICATION_GROUP_KEY)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY) // Bundle immediately, don't show separately
     }
 
 
@@ -383,7 +402,11 @@ class ResultNotificationHelper @Inject constructor(
     private fun Track.getSharedBody() = "$title - ${this.artistWithAlbumFormatted()}"
 
     companion object {
-        private const val NOTIFICATION_ID_RESULT = 2
+        private const val NOTIFICATION_ID_SUMMARY = 2
+        private const val NOTIFICATION_ID_ERROR = 3
+        private const val NOTIFICATION_GROUP_KEY = "com.mrsep.musicrecognizer.RECOGNITION_GROUP"
+        private var notificationIdCounter = 1000
+        private var recognizedSongsCount = 0
 
         private const val NOTIFICATION_CHANNEL_ID_BACKGROUND_RESULT = "com.mrsep.musicrecognizer.result"
         private const val NOTIFICATION_CHANNEL_ID_FOREGROUND_RESULT = "com.mrsep.musicrecognizer.foreground_result"

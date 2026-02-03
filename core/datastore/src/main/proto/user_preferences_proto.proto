@@ -129,6 +129,12 @@ message UserPreferencesProto {
 
   optional bool use_alt_device_sound_source = 47;
 
-  // NEXT AVAILABLE ID: 48
+  bool show_timestamp_format_in_library = 48;
+
+  bool show_recognition_popup = 49;
+
+  bool auto_recognize_enabled = 50;
+
+  // NEXT AVAILABLE ID: 51
 
 }

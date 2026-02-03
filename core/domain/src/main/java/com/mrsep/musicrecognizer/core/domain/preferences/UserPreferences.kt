@@ -24,11 +24,14 @@ data class UserPreferences(
     val useGridForRecognitionQueue: Boolean,
     val showRecognitionDateInLibrary: Boolean,
     val showCreationDateInQueue: Boolean,
+    val showTimestampFormatInLibrary: Boolean,
+    val showRecognitionPopup: Boolean,
+    val autoRecognizeEnabled: Boolean,
     val themeMode: ThemeMode,
     val usePureBlackForDarkTheme: Boolean,
 )
 
-enum class AudioCaptureMode { Microphone, Device, Auto }
+enum class AudioCaptureMode { Microphone, Device, Auto, Visualizer, AutoVisualizerMic }
 
 enum class FallbackAction(val save: Boolean, val launch: Boolean) {
 

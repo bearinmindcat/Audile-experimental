@@ -100,3 +100,6 @@ output.json
 # Native blobs
 # core/recognition/src/main/jniLibs/*
 *.so
+
+# Claude Code
+.claude/

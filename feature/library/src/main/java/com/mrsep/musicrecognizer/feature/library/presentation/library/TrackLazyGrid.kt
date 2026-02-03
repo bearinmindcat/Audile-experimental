@@ -36,6 +36,7 @@ internal fun TrackLazyGrid(
     lazyGridState: LazyGridState,
     multiSelectionState: MultiSelectionState<String>,
     showRecognitionDate: Boolean,
+    showTimestampFormat: Boolean,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -59,6 +60,7 @@ internal fun TrackLazyGrid(
                 },
                 onLongClick = { multiSelectionState.toggleSelection(track.id) },
                 showRecognitionDate = showRecognitionDate,
+                showTimestampFormat = showTimestampFormat,
                 modifier = Modifier.animateItem()
             )
         }
@@ -73,6 +75,7 @@ private fun TrackLazyGridItem(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
     showRecognitionDate: Boolean,
+    showTimestampFormat: Boolean,
     shape: Shape = MaterialTheme.shapes.medium
 ) {
     val containerColor by animateColorAsState(
@@ -149,6 +152,16 @@ private fun TrackLazyGridItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+            if (showTimestampFormat) {
+                Text(
+                    text = track.timestampFormat,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start
+                )
+            }
             Spacer(Modifier.height(2.dp))
             if (showRecognitionDate) {
                 Text(

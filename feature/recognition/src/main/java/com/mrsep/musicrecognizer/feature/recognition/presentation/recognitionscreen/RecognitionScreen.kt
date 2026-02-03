@@ -112,6 +112,12 @@ internal fun RecognitionScreen(
                         mediaProjectionLauncher.launch(intent)
                     }
                 }
+                AudioCaptureMode.Visualizer -> {
+                    viewModel.launchRecognition(AudioCaptureServiceMode.Visualizer)
+                }
+                AudioCaptureMode.AutoVisualizerMic -> {
+                    viewModel.launchRecognition(AudioCaptureServiceMode.AutoVisualizerMic)
+                }
             }
         } else {
             val activity = context.findActivity()
@@ -157,6 +163,12 @@ internal fun RecognitionScreen(
                         val intent = mediaProjectionManager.createScreenCaptureIntentForDisplay()
                         mediaProjectionLauncher.launch(intent)
                     }
+                }
+                AudioCaptureMode.Visualizer -> {
+                    viewModel.launchRecognition(AudioCaptureServiceMode.Visualizer)
+                }
+                AudioCaptureMode.AutoVisualizerMic -> {
+                    viewModel.launchRecognition(AudioCaptureServiceMode.AutoVisualizerMic)
                 }
             }
         } else if (requiredPermissionsState.shouldShowRationale) {

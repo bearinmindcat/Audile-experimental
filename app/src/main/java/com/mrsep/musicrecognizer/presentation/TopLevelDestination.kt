@@ -34,5 +34,11 @@ enum class TopLevelDestination(
         titleResId = StringsR.string.preferences,
         selectedIconResId = UiR.drawable.outline_settings_fill1_24,
         unselectedIconResId = UiR.drawable.outline_settings_24
+    ),
+    ForkEdits(
+        route = "nav_graph_fork_edits",
+        titleResId = StringsR.string.fork_edits,
+        selectedIconResId = UiR.drawable.outline_local_dining_24,
+        unselectedIconResId = UiR.drawable.outline_local_dining_24
     )
 }

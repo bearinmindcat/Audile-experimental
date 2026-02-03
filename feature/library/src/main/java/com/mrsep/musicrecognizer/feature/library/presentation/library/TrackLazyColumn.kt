@@ -52,6 +52,7 @@ internal fun TrackLazyColumn(
     lazyListState: LazyListState,
     multiSelectionState: MultiSelectionState<String>,
     showRecognitionDate: Boolean,
+    showTimestampFormat: Boolean,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -75,6 +76,7 @@ internal fun TrackLazyColumn(
                     },
                     onLongClick = { multiSelectionState.toggleSelection(track.id) },
                     showRecognitionDate = showRecognitionDate,
+                    showTimestampFormat = showTimestampFormat,
                     contentPadding = PaddingValues(vertical = 5.dp, horizontal = 12.dp)
                 )
                 if (index != trackList.lastIndex) {
@@ -93,6 +95,7 @@ private fun TrackLazyColumnItem(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
     showRecognitionDate: Boolean,
+    showTimestampFormat: Boolean,
     contentPadding: PaddingValues,
     shape: Shape = MaterialTheme.shapes.medium,
 ) {
@@ -175,6 +178,18 @@ private fun TrackLazyColumnItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth(0.95f)
             )
+            if (showTimestampFormat) {
+                Text(
+                    text = track.timestampFormat,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
+                        .alpha(0.7f)
+                        .fillMaxWidth(0.95f)
+                )
+            }
             if (showRecognitionDate) {
                 Spacer(Modifier.weight(1f))
                 Text(

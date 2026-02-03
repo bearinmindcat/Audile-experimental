@@ -42,6 +42,7 @@ import com.mrsep.musicrecognizer.core.domain.preferences.AudioCaptureMode
 import com.mrsep.musicrecognizer.core.ui.R
 import com.mrsep.musicrecognizer.core.ui.components.DialogSwitch
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import com.mrsep.musicrecognizer.core.strings.R as StringsR
 
@@ -57,6 +58,19 @@ internal fun AudioSourceDialog(
     onChangeUseAltDeviceSoundSource: (Boolean) -> Unit,
     onDismissClick: () -> Unit,
 ) {
+    // Filter options based on whether Visualizer API is enabled
+    val availableOptions = if (useAltDeviceSoundSource) {
+        // When Visualizer API is enabled, show all options
+        AudioCaptureMode.entries.toImmutableList()
+    } else {
+        // When disabled, only show basic options (no Visualizer, no AutoVisualizerMic)
+        persistentListOf(
+            AudioCaptureMode.Microphone,
+            AudioCaptureMode.Device,
+            AudioCaptureMode.Auto
+        )
+    }
+
     AlertDialog(
         title = {
             Text(text = stringResource(StringsR.string.audio_source_dialog_title))
@@ -75,19 +89,21 @@ internal fun AudioSourceDialog(
                 Text(text = stringResource(StringsR.string.audio_source_dialog_default_mode_message))
                 Spacer(Modifier.height(16.dp))
                 AudioCaptureModeDropdownMenu(
-                    modes = allOptions,
+                    modes = availableOptions,
                     label = stringResource(StringsR.string.audio_source_dialog_default_mode_title),
                     selectedMode = defaultAudioCaptureMode,
                     onSelectMode = onChangeDefaultAudioCaptureMode,
+                    useAltDeviceSoundSource = useAltDeviceSoundSource,
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(text = stringResource(StringsR.string.audio_source_dialog_button_long_press_mode_message))
                 Spacer(Modifier.height(16.dp))
                 AudioCaptureModeDropdownMenu(
-                    modes = allOptions,
+                    modes = availableOptions,
                     label = stringResource(StringsR.string.audio_source_dialog_button_long_press_mode_title),
                     selectedMode = mainButtonLongPressAudioCaptureMode,
                     onSelectMode = onChangeMainButtonLongPressAudioCaptureMode,
+                    useAltDeviceSoundSource = useAltDeviceSoundSource,
                 )
                 Spacer(Modifier.height(16.dp))
                 var showAltDeviceSourceDialog by remember { mutableStateOf(false) }
@@ -143,6 +159,7 @@ private fun AudioCaptureModeDropdownMenu(
     modes: ImmutableList<AudioCaptureMode>,
     selectedMode: AudioCaptureMode,
     onSelectMode: (AudioCaptureMode) -> Unit,
+    useAltDeviceSoundSource: Boolean,
 ) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -151,7 +168,7 @@ private fun AudioCaptureModeDropdownMenu(
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = selectedMode.getTitle(),
+            value = selectedMode.getTitle(useAltDeviceSoundSource),
             onValueChange = {},
             readOnly = true,
             label = { Text(text = label) },
@@ -169,11 +186,11 @@ private fun AudioCaptureModeDropdownMenu(
             shape = MaterialTheme.shapes.small,
             containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         ) {
-            modes.forEach { selectedMode ->
+            modes.forEach { mode ->
                 DropdownMenuItem(
-                    text = { Text(selectedMode.getTitle()) },
+                    text = { Text(mode.getTitle(useAltDeviceSoundSource)) },
                     onClick = {
-                        onSelectMode(selectedMode)
+                        onSelectMode(mode)
                         expanded = false
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -183,14 +200,18 @@ private fun AudioCaptureModeDropdownMenu(
     }
 }
 
-private val allOptions = AudioCaptureMode.entries.toImmutableList()
-
 @Composable
-private fun AudioCaptureMode.getTitle(): String {
+private fun AudioCaptureMode.getTitle(useAltDeviceSoundSource: Boolean): String {
     return when (this) {
         AudioCaptureMode.Microphone -> stringResource(StringsR.string.audio_capture_mode_microphone)
         AudioCaptureMode.Device -> stringResource(StringsR.string.audio_capture_mode_device)
-        AudioCaptureMode.Auto -> stringResource(StringsR.string.audio_capture_mode_auto)
+        AudioCaptureMode.Auto -> if (useAltDeviceSoundSource) {
+            stringResource(StringsR.string.audio_capture_mode_auto_device_mic)
+        } else {
+            stringResource(StringsR.string.audio_capture_mode_auto)
+        }
+        AudioCaptureMode.Visualizer -> stringResource(StringsR.string.audio_capture_mode_visualizer)
+        AudioCaptureMode.AutoVisualizerMic -> stringResource(StringsR.string.audio_capture_mode_auto_visualizer_mic)
     }
 }
 

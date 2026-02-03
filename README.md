@@ -14,12 +14,12 @@ git clone https://gitlab.com/bearincrypto1/audilemodded.git
 
 ```
 com.mrsep.musicrecognizer/
-├── FORKEDITS/                         # All mod-specific code
-│   ├── AutoRecognitionService.kt      # Background recognition service for auto-recognize function
-│   ├── AutoRecognitionTileService.kt  # Quick settings auto-recognize tile
-│   ├── ForkEditsScreen.kt             # Fork settings UI
-│   ├── ForkEditsViewModel.kt          # Fork settings logic
-│   └── forkchanges.md                 # Complete log of changes to the original audile codebase
+└── FORKEDITS/                         # All mod-specific code
+    ├── AutoRecognitionService.kt      # Background recognition service for auto-recognize function
+    ├── AutoRecognitionTileService.kt  # Quick settings auto-recognize tile
+    ├── ForkEditsScreen.kt             # Fork settings UI
+    ├── ForkEditsViewModel.kt          # Fork settings logic
+    └── forkchanges.md                 # Complete log of changes to the original audile codebase
 ```
 
 ## License

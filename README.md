@@ -22,6 +22,12 @@ com.mrsep.musicrecognizer/
     └── forkchanges.md                 # Complete log of changes to the original audile codebase
 ```
 
+## Screenshots
+
+| Fork Edits | Audio Source |
+|:-----------:|:------------:|
+| ![Fork Edits](screenshots/fork_edits.png) | ![Audio Source](screenshots/audio_source.png) |
+
 ## License
 
 This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE.md) file for details.

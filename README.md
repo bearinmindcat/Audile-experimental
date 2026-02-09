@@ -24,9 +24,7 @@ com.mrsep.musicrecognizer/
 
 ## Screenshots
 
-| Fork Edits | Audio Source |
-|:-----------:|:------------:|
-| ![Fork Edits](screenshots/fork_edits.png) | ![Audio Source](screenshots/audio_source.png) |
+![Fork Edits](screenshots/fork_edits.png) ![Audio Source](screenshots/audio_source.png)
 
 ## License
 

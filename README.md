@@ -1,4 +1,4 @@
-# AudileModded
+# Audile-experimental
 
 Added some more functionality to the original Audile app such as adding timestamps, an auto-recognize quick icon button, and better notification functionality. All original credits go to the owner here https://github.com/aleksey-saenko/MusicRecognizer and you can see all the changes I made by looking at my forkchanges.md file.
 

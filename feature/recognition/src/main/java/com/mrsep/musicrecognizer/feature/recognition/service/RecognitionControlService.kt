@@ -165,6 +165,13 @@ class RecognitionControlService : Service() {
                     AudioCaptureServiceMode.AutoVisualizerMic -> {
                         startForegroundWithType(false)
                     }
+                    is AudioCaptureServiceMode.AutoDeviceVisualizer -> {
+                        val mediaProjection = audioCaptureServiceMode.mediaProjectionData != null
+                        check(!mediaProjection || Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            "AudioPlaybackCapture API is available on Android 10+"
+                        }
+                        startForegroundWithType(mediaProjection)
+                    }
                 }
                 if (!isStartedForeground) return@run
                 onLaunchRecognition(audioCaptureServiceMode)
@@ -303,6 +310,19 @@ class RecognitionControlService : Service() {
                 AudioCaptureServiceMode.Visualizer -> AudioCaptureConfig.Visualizer
 
                 AudioCaptureServiceMode.AutoVisualizerMic -> AudioCaptureConfig.AutoVisualizerMic
+
+                is AudioCaptureServiceMode.AutoDeviceVisualizer -> if (audioCaptureServiceMode.mediaProjectionData != null) {
+                    mediaProjectionManager.getMediaProjection(
+                        Activity.RESULT_OK,
+                        audioCaptureServiceMode.mediaProjectionData
+                    )?.run {
+                        mediaProjection = this
+                        registerCallback(mediaProjectionCallback, Handler(appContext.mainLooper))
+                        AudioCaptureConfig.AutoDeviceVisualizer(this)
+                    }
+                } else {
+                    AudioCaptureConfig.AutoDeviceVisualizer(null)
+                }
             }
             if (captureConfig == null) return@launch
             val recorderController = audioRecordingControllerFactory.getAudioController(captureConfig)
@@ -531,4 +551,5 @@ sealed class AudioCaptureServiceMode : Parcelable {
     data class Auto(val mediaProjectionData: Intent?) : AudioCaptureServiceMode()
     data object Visualizer : AudioCaptureServiceMode()
     data object AutoVisualizerMic : AudioCaptureServiceMode()
+    data class AutoDeviceVisualizer(val mediaProjectionData: Intent?) : AudioCaptureServiceMode()
 }

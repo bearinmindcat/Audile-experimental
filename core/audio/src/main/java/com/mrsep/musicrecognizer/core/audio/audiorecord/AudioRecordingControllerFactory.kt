@@ -47,6 +47,12 @@ class AudioRecordingControllerFactory @Inject constructor(
                 deviceSoundSource = VisualizerSoundSource(appContext),
                 audioRecordingDataSource = audioRecordingDataSource,
             )
+
+            is AudioCaptureConfig.AutoDeviceVisualizer -> DeviceFirstCompositeRecordingController(
+                microphoneSoundSource = VisualizerSoundSource(appContext),
+                deviceSoundSource = deviceSoundSource(audioCaptureConfig.mediaProjection),
+                audioRecordingDataSource = audioRecordingDataSource,
+            )
         }
     }
 }

@@ -212,6 +212,7 @@ private fun AudioCaptureMode.getTitle(useAltDeviceSoundSource: Boolean): String 
         }
         AudioCaptureMode.Visualizer -> stringResource(StringsR.string.audio_capture_mode_visualizer)
         AudioCaptureMode.AutoVisualizerMic -> stringResource(StringsR.string.audio_capture_mode_auto_visualizer_mic)
+        AudioCaptureMode.AutoDeviceVisualizer -> stringResource(StringsR.string.audio_capture_mode_auto_device_visualizer)
     }
 }
 

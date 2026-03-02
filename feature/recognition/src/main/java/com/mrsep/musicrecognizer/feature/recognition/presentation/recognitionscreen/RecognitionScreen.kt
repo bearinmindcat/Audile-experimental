@@ -118,6 +118,14 @@ internal fun RecognitionScreen(
                 AudioCaptureMode.AutoVisualizerMic -> {
                     viewModel.launchRecognition(AudioCaptureServiceMode.AutoVisualizerMic)
                 }
+                AudioCaptureMode.AutoDeviceVisualizer -> {
+                    if (preferences?.useAltDeviceSoundSource == true) {
+                        viewModel.launchRecognition(lastMode.toServiceMode(null))
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val intent = mediaProjectionManager.createScreenCaptureIntentForDisplay()
+                        mediaProjectionLauncher.launch(intent)
+                    }
+                }
             }
         } else {
             val activity = context.findActivity()
@@ -169,6 +177,14 @@ internal fun RecognitionScreen(
                 }
                 AudioCaptureMode.AutoVisualizerMic -> {
                     viewModel.launchRecognition(AudioCaptureServiceMode.AutoVisualizerMic)
+                }
+                AudioCaptureMode.AutoDeviceVisualizer -> {
+                    if (preferences?.useAltDeviceSoundSource == true) {
+                        viewModel.launchRecognition(captureMode.toServiceMode(null))
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val intent = mediaProjectionManager.createScreenCaptureIntentForDisplay()
+                        mediaProjectionLauncher.launch(intent)
+                    }
                 }
             }
         } else if (requiredPermissionsState.shouldShowRationale) {

@@ -29,13 +29,15 @@ class ForkEditsViewModel @Inject constructor(
 
                 // Reset default mode to Microphone if it was Visualizer or AutoVisualizerMic
                 if (currentPrefs.defaultAudioCaptureMode == AudioCaptureMode.Visualizer ||
-                    currentPrefs.defaultAudioCaptureMode == AudioCaptureMode.AutoVisualizerMic) {
+                    currentPrefs.defaultAudioCaptureMode == AudioCaptureMode.AutoVisualizerMic ||
+                    currentPrefs.defaultAudioCaptureMode == AudioCaptureMode.AutoDeviceVisualizer) {
                     preferencesRepository.setDefaultAudioCaptureMode(AudioCaptureMode.Microphone)
                 }
 
                 // Reset button long press mode to Auto if it was Visualizer or AutoVisualizerMic
                 if (currentPrefs.mainButtonLongPressAudioCaptureMode == AudioCaptureMode.Visualizer ||
-                    currentPrefs.mainButtonLongPressAudioCaptureMode == AudioCaptureMode.AutoVisualizerMic) {
+                    currentPrefs.mainButtonLongPressAudioCaptureMode == AudioCaptureMode.AutoVisualizerMic ||
+                    currentPrefs.mainButtonLongPressAudioCaptureMode == AudioCaptureMode.AutoDeviceVisualizer) {
                     preferencesRepository.setMainButtonLongPressAudioCaptureMode(AudioCaptureMode.Auto)
                 }
             }

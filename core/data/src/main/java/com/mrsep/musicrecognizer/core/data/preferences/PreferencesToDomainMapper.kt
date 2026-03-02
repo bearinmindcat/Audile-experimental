@@ -131,6 +131,7 @@ internal fun AudioCaptureModeProto.toDomain() = when (this) {
     AudioCaptureModeProto.Auto -> AudioCaptureMode.Auto
     AudioCaptureModeProto.Visualizer -> AudioCaptureMode.Visualizer
     AudioCaptureModeProto.AutoVisualizerMic -> AudioCaptureMode.AutoVisualizerMic
+    AudioCaptureModeProto.AutoDeviceVisualizer -> AudioCaptureMode.AutoDeviceVisualizer
     AudioCaptureModeProto.UNRECOGNIZED -> error("Unexpected proto value")
 }
 

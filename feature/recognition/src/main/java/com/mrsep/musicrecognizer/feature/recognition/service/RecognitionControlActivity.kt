@@ -159,6 +159,15 @@ class RecognitionControlActivity : ComponentActivity() {
             AudioCaptureMode.AutoVisualizerMic -> {
                 onLaunchRecognition(AudioCaptureServiceMode.AutoVisualizerMic)
             }
+            AudioCaptureMode.AutoDeviceVisualizer -> if (useAltDeviceSoundSource) {
+                onLaunchRecognition(requestedAudioCaptureMode.toServiceMode(null))
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val intent = mediaProjectionManager.createScreenCaptureIntentForDisplay()
+                requestMediaProjectionLauncher.launch(intent)
+            } else {
+                Log.w(this::class.java.simpleName, "AudioPlaybackCapture API is available on Android 10+")
+                finish()
+            }
         }
     }
 
@@ -304,4 +313,5 @@ internal fun AudioCaptureMode.toServiceMode(mediaProjectionData: Intent?) = when
     AudioCaptureMode.Auto -> AudioCaptureServiceMode.Auto(mediaProjectionData)
     AudioCaptureMode.Visualizer -> AudioCaptureServiceMode.Visualizer
     AudioCaptureMode.AutoVisualizerMic -> AudioCaptureServiceMode.AutoVisualizerMic
+    AudioCaptureMode.AutoDeviceVisualizer -> AudioCaptureServiceMode.AutoDeviceVisualizer(mediaProjectionData)
 }

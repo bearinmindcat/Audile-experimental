@@ -9,4 +9,5 @@ sealed class AudioCaptureConfig {
     data class Auto(val mediaProjection: MediaProjection?) : AudioCaptureConfig()
     data object Visualizer : AudioCaptureConfig()
     data object AutoVisualizerMic : AudioCaptureConfig()
+    data class AutoDeviceVisualizer(val mediaProjection: MediaProjection?) : AudioCaptureConfig()
 }

@@ -206,6 +206,7 @@
     <string name="audio_capture_mode_visualizer">Visualizer API</string>
     <string name="audio_capture_mode_auto_visualizer_mic">Automatic (Visualizer -> Mic)</string>
     <string name="audio_capture_mode_auto_device_visualizer">Automatic (Device -> Visualizer)</string>
+    <string name="audio_capture_mode_auto_recognizer">Auto Recognizer</string>
     <string name="audio_source_dialog_use_alt_device_source">Use alternative device audio source</string>
     <string name="pref_title_fallback_policy">Recognition fallback policy</string>
     <string name="pref_subtitle_fallback_policy">Set fallback actions after unsuccessful recognitions</string>
@@ -297,8 +298,8 @@
     <string name="auto_recognize_notification_channel_desc">Continuous background music recognition</string>
     <string name="auto_recognize_notification_title">Auto-recognition active</string>
     <string name="auto_recognize_notification_text">Listening for songs in the background</string>
-    <string name="auto_recognize_tile_active">Auto recognize ON</string>
-    <string name="auto_recognize_tile_inactive">Auto recognize</string>
+    <string name="auto_recognize_tile_active">Auto Recognize</string>
+    <string name="auto_recognize_tile_inactive">Auto Recognize</string>
     <string name="stop">Stop</string>
 
     <string name="crash_dialog_title">Audile has crashed</string>

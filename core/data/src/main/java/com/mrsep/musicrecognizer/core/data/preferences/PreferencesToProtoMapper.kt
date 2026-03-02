@@ -48,6 +48,7 @@ internal fun AudioCaptureMode.toProto() = when (this) {
     AudioCaptureMode.Visualizer -> AudioCaptureModeProto.Visualizer
     AudioCaptureMode.AutoVisualizerMic -> AudioCaptureModeProto.AutoVisualizerMic
     AudioCaptureMode.AutoDeviceVisualizer -> AudioCaptureModeProto.AutoDeviceVisualizer
+    AudioCaptureMode.AutoRecognizer -> AudioCaptureModeProto.AutoRecognizer
 }
 
 internal fun FallbackAction.toProto() = when (this) {

@@ -126,6 +126,9 @@ internal fun RecognitionScreen(
                         mediaProjectionLauncher.launch(intent)
                     }
                 }
+                AudioCaptureMode.AutoRecognizer -> {
+                    startAutoRecognizeService(context, viewModel)
+                }
             }
         } else {
             val activity = context.findActivity()
@@ -186,6 +189,9 @@ internal fun RecognitionScreen(
                         mediaProjectionLauncher.launch(intent)
                     }
                 }
+                AudioCaptureMode.AutoRecognizer -> {
+                    startAutoRecognizeService(context, viewModel)
+                }
             }
         } else if (requiredPermissionsState.shouldShowRationale) {
             showPermissionsRationaleDialog = true
@@ -226,9 +232,24 @@ internal fun RecognitionScreen(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
             ) {
+                fun stopAutoRecognize() {
+                    viewModel.stopAutoRecognition()
+                    val stopIntent = android.content.Intent().apply {
+                        action = "com.mrsep.musicrecognizer.AUTO_RECOGNIZE_STOP"
+                        setClassName(
+                            context.packageName,
+                            "com.mrsep.musicrecognizer.forkedits.AutoRecognitionService"
+                        )
+                    }
+                    try { context.startService(stopIntent) } catch (_: Exception) {}
+                }
                 fun onClick(captureMode: AudioCaptureMode) {
                     if (recognizeStatus.isDone()) return
                     if (preferences.vibrateOnTap()) viewModel.vibrateOnTap()
+                    if (preferences?.autoRecognizeEnabled == true) {
+                        stopAutoRecognize()
+                        return
+                    }
                     if (recognizeStatus is RecognitionStatus.Recognizing) {
                         viewModel.cancelRecognition()
                     } else {
@@ -239,8 +260,10 @@ internal fun RecognitionScreen(
                     title = getButtonTitle(recognizeStatus, autostart),
                     onButtonClick = { defaultCaptureMode?.run(::onClick) },
                     onButtonLongClick = { longClickCaptureMode?.run(::onClick) },
-                    activated = recognizeStatus is RecognitionStatus.Recognizing,
+                    activated = recognizeStatus is RecognitionStatus.Recognizing || preferences?.autoRecognizeEnabled == true,
                     soundLevelState = soundLevelState,
+                    autoRecognizeActive = preferences?.autoRecognizeEnabled == true,
+                    onAutoRecognizeTap = { stopAutoRecognize() },
                     modifier = Modifier.padding(24.dp)
                 )
             }
@@ -515,4 +538,19 @@ private fun RemoteRecognitionResult.Error.getErrorInfo() = when (this) {
 
     is RemoteRecognitionResult.Error.UnhandledError ->
         "Message:\n$message\n\nCause:\n${cause?.stackTraceToString()}"
+}
+
+private fun startAutoRecognizeService(
+    context: android.content.Context,
+    viewModel: RecognitionViewModel
+) {
+    viewModel.startAutoRecognition()
+    val startIntent = android.content.Intent().apply {
+        action = "com.mrsep.musicrecognizer.AUTO_RECOGNIZE_START"
+        setClassName(
+            context.packageName,
+            "com.mrsep.musicrecognizer.forkedits.AutoRecognitionService"
+        )
+    }
+    try { context.startForegroundService(startIntent) } catch (_: Exception) {}
 }

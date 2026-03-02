@@ -31,7 +31,7 @@ data class UserPreferences(
     val usePureBlackForDarkTheme: Boolean,
 )
 
-enum class AudioCaptureMode { Microphone, Device, Auto, Visualizer, AutoVisualizerMic, AutoDeviceVisualizer }
+enum class AudioCaptureMode { Microphone, Device, Auto, Visualizer, AutoVisualizerMic, AutoDeviceVisualizer, AutoRecognizer }
 
 enum class FallbackAction(val save: Boolean, val launch: Boolean) {
 

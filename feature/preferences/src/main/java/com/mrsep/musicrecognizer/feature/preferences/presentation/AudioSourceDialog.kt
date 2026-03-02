@@ -64,10 +64,12 @@ internal fun AudioSourceDialog(
         AudioCaptureMode.entries.toImmutableList()
     } else {
         // When disabled, only show basic options (no Visualizer, no AutoVisualizerMic)
+        // Always include AutoRecognizer
         persistentListOf(
             AudioCaptureMode.Microphone,
             AudioCaptureMode.Device,
-            AudioCaptureMode.Auto
+            AudioCaptureMode.Auto,
+            AudioCaptureMode.AutoRecognizer
         )
     }
 
@@ -213,6 +215,7 @@ private fun AudioCaptureMode.getTitle(useAltDeviceSoundSource: Boolean): String 
         AudioCaptureMode.Visualizer -> stringResource(StringsR.string.audio_capture_mode_visualizer)
         AudioCaptureMode.AutoVisualizerMic -> stringResource(StringsR.string.audio_capture_mode_auto_visualizer_mic)
         AudioCaptureMode.AutoDeviceVisualizer -> stringResource(StringsR.string.audio_capture_mode_auto_device_visualizer)
+        AudioCaptureMode.AutoRecognizer -> stringResource(StringsR.string.audio_capture_mode_auto_recognizer)
     }
 }
 

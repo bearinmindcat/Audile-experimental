@@ -5,14 +5,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.mrsep.musicrecognizer.core.audio.audiorecord.AudioCaptureConfig
 import com.mrsep.musicrecognizer.core.audio.audiorecord.AudioRecordingControllerFactory
+import com.mrsep.musicrecognizer.core.domain.preferences.AudioCaptureMode
 import com.mrsep.musicrecognizer.core.domain.preferences.PreferencesRepository
 import com.mrsep.musicrecognizer.core.domain.recognition.RecognitionInteractor
 import com.mrsep.musicrecognizer.core.domain.recognition.model.RecognitionResult
@@ -82,7 +85,20 @@ class AutoRecognitionService : Service() {
 
     private fun startAutoRecognition() {
         Log.d(TAG, "Starting auto recognition service")
-        startForeground(NOTIFICATION_ID, createNotification())
+        try {
+            startForeground(NOTIFICATION_ID, createNotification())
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Cannot start foreground service - missing permissions", e)
+            stopSelf()
+            return
+        }
+
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(applicationContext, "Auto Recognizer is on", Toast.LENGTH_SHORT).show()
+        }
+
+        // Update the quick settings tile to show active
+        AutoRecognitionTileService.requestListeningState(this)
 
         recognitionJob = serviceScope.launch {
             while (isActive) {
@@ -97,26 +113,37 @@ class AutoRecognitionService : Service() {
     }
 
     private suspend fun performRecognition() {
+        Log.d(TAG, "Starting recognition attempt...")
         val preferences = preferencesRepository.userPreferencesFlow.first()
 
-        // Determine audio capture config based on preferences
+        // Use the default audio capture config from preferences
         val captureConfig = when {
-            preferences.useAltDeviceSoundSource -> AudioCaptureConfig.Visualizer
+            preferences.useAltDeviceSoundSource -> when (preferences.defaultAudioCaptureMode) {
+                AudioCaptureMode.Visualizer,
+                AudioCaptureMode.AutoVisualizerMic,
+                AudioCaptureMode.AutoDeviceVisualizer -> AudioCaptureConfig.Visualizer
+                else -> AudioCaptureConfig.Microphone
+            }
             else -> AudioCaptureConfig.Microphone
         }
+        Log.d(TAG, "Using capture config: $captureConfig (default mode: ${preferences.defaultAudioCaptureMode})")
 
         val audioController = audioRecordingControllerFactory.getAudioController(captureConfig)
 
         // Cancel any previous recognition and wait
+        Log.d(TAG, "Cancelling any previous recognition...")
         recognitionInteractor.cancelAndJoin()
+        Log.d(TAG, "Previous recognition cancelled, launching new one...")
 
         // Launch recognition using the proper context pattern
         with(serviceScope) {
             recognitionInteractor.launchRecognition(audioController)
         }
+        Log.d(TAG, "Recognition launched, waiting for result...")
 
         // Wait for recognition to complete by collecting from status flow
         recognitionInteractor.status.transformWhile { status ->
+            Log.d(TAG, "Status update: $status")
             emit(status)
             status !is RecognitionStatus.Done
         }.collect { status ->
@@ -125,6 +152,7 @@ class AutoRecognitionService : Service() {
                 recognitionInteractor.resetFinalStatus()
             }
         }
+        Log.d(TAG, "Recognition attempt completed")
     }
 
     private suspend fun handleRecognitionResult(result: RecognitionResult) {
@@ -211,6 +239,9 @@ class AutoRecognitionService : Service() {
 
     private fun stopAutoRecognition() {
         Log.d(TAG, "Stopping auto recognition service")
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(applicationContext, "Auto Recognizer is off", Toast.LENGTH_SHORT).show()
+        }
         recognitionJob?.cancel()
         recognitionJob = null
         lastRecognizedTrackId = null

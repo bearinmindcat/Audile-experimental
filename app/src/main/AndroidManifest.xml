@@ -80,6 +80,15 @@
             </intent-filter>
         </service>
 
+        <!-- Auto-recognition launcher activity (FORKEDITS) -->
+        <activity
+            android:name=".forkedits.AutoRecognitionLauncherActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MusicRecognizer.Invisible"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity="" />
+
         <!-- Auto-recognition service (FORKEDITS) -->
         <service
             android:name=".forkedits.AutoRecognitionService"

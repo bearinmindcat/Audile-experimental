@@ -181,6 +181,7 @@ internal class LaunchRecognition : ActionCallback {
             AudioCaptureMode.Visualizer -> true
             AudioCaptureMode.AutoVisualizerMic -> true
             AudioCaptureMode.AutoDeviceVisualizer -> preferences.useAltDeviceSoundSource
+            AudioCaptureMode.AutoRecognizer -> true
         }
         val skipPermissionsRequests = skipMediaProjectionRequest &&
                 context.checkPermissionsGranted(getRequiredPermissionsForRecognition())

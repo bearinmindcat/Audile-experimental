@@ -168,6 +168,10 @@ class RecognitionControlActivity : ComponentActivity() {
                 Log.w(this::class.java.simpleName, "AudioPlaybackCapture API is available on Android 10+")
                 finish()
             }
+            AudioCaptureMode.AutoRecognizer -> {
+                // Auto Recognizer is handled in RecognitionScreen, not here
+                finish()
+            }
         }
     }
 
@@ -314,4 +318,5 @@ internal fun AudioCaptureMode.toServiceMode(mediaProjectionData: Intent?) = when
     AudioCaptureMode.Visualizer -> AudioCaptureServiceMode.Visualizer
     AudioCaptureMode.AutoVisualizerMic -> AudioCaptureServiceMode.AutoVisualizerMic
     AudioCaptureMode.AutoDeviceVisualizer -> AudioCaptureServiceMode.AutoDeviceVisualizer(mediaProjectionData)
+    AudioCaptureMode.AutoRecognizer -> AudioCaptureServiceMode.Microphone // Fallback, not actually used
 }

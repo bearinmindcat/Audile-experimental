@@ -11,4 +11,5 @@ enum AudioCaptureModeProto {
     Visualizer = 4;
     AutoVisualizerMic = 5;
     AutoDeviceVisualizer = 6;
+    AutoRecognizer = 7;
 }
